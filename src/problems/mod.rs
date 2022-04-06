@@ -6,3 +6,4 @@ pub mod no52_n_queens_ii;
 pub mod no53_maximun_subarray;
 pub mod no54_spiral_matrix;
 pub mod no55_jump_game;
+pub mod no56_merge_intervals;
