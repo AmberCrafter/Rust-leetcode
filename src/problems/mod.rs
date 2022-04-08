@@ -8,3 +8,4 @@ pub mod no54_spiral_matrix;
 pub mod no55_jump_game;
 pub mod no56_merge_intervals;
 pub mod no57_insert_interval;
+pub mod no58_length_of_last_word;
