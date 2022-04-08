@@ -1,5 +1,3 @@
-use std::collections::btree_set::Intersection;
-
 pub struct Solution {}
 
 impl Solution {
