@@ -10,3 +10,4 @@ pub mod no56_merge_intervals;
 pub mod no57_insert_interval;
 pub mod no58_length_of_last_word;
 pub mod no59_spiral_matrix_ii;
+pub mod no60_permutation_sequence;
