@@ -18,25 +18,57 @@ impl ListNode {
 
 impl Solution {
     pub fn rotate_right(head: Option<Box<ListNode>>, k: i32) -> Option<Box<ListNode>> {
-        // ref. https://leetcode.com/problems/rotate-list/discuss/883433/Rust-0ms
-        // Rust is not easy to maintain ListNode structure with ownership system
-        // Thus, creating the new ListNode is the more performance way than modified origin Node
-        let mut arr: Vec<i32> = Vec::new();
-        let mut node = head.as_ref();
-        while let Some(n) = node {
-            arr.push(n.val);
-            node = n.next.as_ref();
+        // use the Option.take() method to achive the result.
+        // when use the Option.take(), it will take the content and leave None
+        // ex. 
+        /* 
+        if there have a node like this
+        node1=ListNode {val, next: {ListNode{...}}}
+        
+        and run this code
+        > node2 = node1.next.take();
+        
+        then we can get the result like
+        node1=ListNode {val, next: None}
+        node2=ListNode {val, next: ListNode{...}}
+        and move the ownership
+        */
+        
+        // Note. this performace may worse than 
+        //      store the element in Vec<i32>
+        //      and re-generate the new ListNode to return 
+        //  because we need to create a larger space ( Vec<Option<Box<T>>> ) and fat pointer move.
+        //
+        // We can use below code to check the ListNode address witch wrapped with Box.
+        // println!("{:p}", &**head.as_ref().unwrap());
+        
+
+        // main code with address check
+
+        // println!("{:p}", &**head.as_ref().unwrap());
+        if k==0 {return head;}
+        let mut head = head;
+        // println!("{:p}", &**head.as_ref().unwrap());
+        let mut arr: Vec<Option<Box<ListNode>>> = Vec::new();
+        
+        while head.is_some() {
+            let next = head.as_mut().unwrap().next.take();
+            arr.push(head);
+            head = next;
+        }
+        
+        let length = arr.len();
+        if length==0 {return  None;}
+
+        let sp = length-(k as usize%length);
+        let mut res = arr[(sp + length -1) % length].take();
+        for i in 1..length {
+            let mut tmp = arr[(sp + length - i -1) % length].take();
+            tmp.as_mut().unwrap().next = res;
+            res = tmp;
         }
 
-        let mut res = None;
-        for i in (0..arr.len()).rev() {
-            let j = k as usize % arr.len();
-            res = Some(Box::new(ListNode {
-                val: arr[(arr.len() + i - j) % arr.len()],
-                next: res,
-            }))
-        }
-
+        // println!("{:p}", &**res.as_ref().unwrap());
         res
     }
 }
@@ -85,10 +117,7 @@ mod tests {
             val: 0,
             next: Some(Box::new(ListNode {
                 val: 1,
-                next: Some(Box::new(ListNode {
-                    val: 2,
-                    next: None
-                })),
+                next: Some(Box::new(ListNode { val: 2, next: None })),
             })),
         });
         let inputs = (listnode, 4);
@@ -96,11 +125,46 @@ mod tests {
             val: 2,
             next: Some(Box::new(ListNode {
                 val: 0,
-                next: Some(Box::new(ListNode {
-                    val: 1,
-                    next: None
-                })),
+                next: Some(Box::new(ListNode { val: 1, next: None })),
             })),
+        }));
+        let result = Solution::rotate_right(Some(inputs.0), inputs.1);
+
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn case_3() {
+        let listnode = Box::new(ListNode {
+            val: 1,
+            next: Some(Box::new(ListNode {
+                val: 2,
+                next: None,
+            })),
+        });
+        let inputs = (listnode, 0);
+        let expected = Some(Box::new(ListNode {
+            val: 1,
+            next: Some(Box::new(ListNode {
+                val: 2,
+                next: None,
+            })),
+        }));
+        let result = Solution::rotate_right(Some(inputs.0), inputs.1);
+
+        assert_eq!(expected, result);
+    }
+
+    #[test]
+    fn case_4() {
+        let listnode = Box::new(ListNode {
+            val: 1,
+            next: None,
+        });
+        let inputs = (listnode, 1);
+        let expected = Some(Box::new(ListNode {
+            val: 1,
+            next: None
         }));
         let result = Solution::rotate_right(Some(inputs.0), inputs.1);
 
