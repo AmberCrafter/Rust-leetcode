@@ -1,20 +1,28 @@
 pub struct Solution {}
 
 impl Solution {
-    pub fn next_step(res: &mut i32, n: i32, m: i32, x: i32 ,y: i32) {
-        if x==n-1 && y==m-1 { *res+=1; return}
-        if x<n-1 {
-            Solution::next_step(res, n, m, x+1, y);
-        }
-        if y<m-1 {
-            Solution::next_step(res, n, m, x, y+1);
-        }
-    }
-
     pub fn unique_paths(m: i32, n: i32) -> i32 {
-        let mut res = 0;
-        Solution::next_step(&mut res, n, m, 0, 0);
-        res
+        // ref. https://leetcode.com/problems/unique-paths/discuss/240806/Rust-solution
+        // Because the robot only walk down and right, the algorithm need to care about 
+        // the times which the robot come from the top or left box.
+
+        let n = n as usize;
+        let m = m as usize;
+        let mut paths = vec![vec![0; n]; m];
+        
+        for i in 0..m {
+            paths[i][0] = 1;
+        }
+        for i in 0..n {
+            paths[0][i] = 1; 
+        }
+                
+        for i in 1..m {
+            for j in 1..n {
+                paths[i][j] = paths[i-1][j] + paths[i][j-1];
+            }
+        }
+        return paths[m-1][n-1] as i32;
     }
 }
 
