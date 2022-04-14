@@ -13,3 +13,4 @@ pub mod no58_length_of_last_word;
 pub mod no59_spiral_matrix_ii;
 pub mod no60_permutation_sequence;
 pub mod no61_rotate_list;
+pub mod no62_unique_paths;

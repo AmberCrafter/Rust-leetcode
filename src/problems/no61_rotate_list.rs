@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 pub struct Solution {}
 
 // Definition for singly-linked list.
