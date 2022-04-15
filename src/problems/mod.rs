@@ -18,3 +18,4 @@ pub mod no63_unique_paths_ii;
 pub mod no64_minimum_path_sum;
 pub mod no65_valid_number;
 pub mod no66_plus_one;
+pub mod no67_add_binary;
