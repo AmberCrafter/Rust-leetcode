@@ -20,3 +20,4 @@ pub mod no65_valid_number;
 pub mod no66_plus_one;
 pub mod no67_add_binary;
 pub mod no68_text_justification;
+pub mod no69_sqrt;
