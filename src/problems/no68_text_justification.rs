@@ -1,95 +1,87 @@
+use core::num;
+
 pub struct Solution {}
 impl Solution {
     pub fn full_justify(words: Vec<String>, max_width: i32) -> Vec<String> {
         let mut res = vec![];
+        let mut nums_char = 0;
         let mut sp = 0;
-        let mut idx = 0;
+        let mut tmp_str = "".to_string();
 
-        while sp < words.len() {
-            // get the range of the words push into the result vector
-            let mut num_alphabet = 0;
-            while (idx < words.len()) && ((num_alphabet + words[idx].len()) <= max_width as usize) {
-                num_alphabet += words[idx].len();
-                num_alphabet += 1; // for space
-                idx += 1;
-            }
-            // println!("idx: {}\tnum_alphabet:{}", idx,num_alphabet);
-            if idx == words.len() {
-                let mut tmp = "".to_string();
-                for i in sp..words.len() {
-                    tmp.push_str(&words[i]);
-                    tmp.push(' ');
-                }
-                match num_alphabet==(max_width+1) as usize {
-                    true => {tmp.pop().unwrap();},
-                    false => {tmp.push_str(
-                        &((0..max_width as usize - num_alphabet).fold("".to_string(), |mut s, _| {
-                            s.push(' ');
-                            s
-                        })),
-                    );}
-                }
-                res.push(tmp);
-                break;
+        for (i, s) in words.iter().enumerate() {
+            if nums_char + s.len() + i - sp <= max_width as usize {
+                nums_char += s.len();
+                continue;
             }
 
-            // layout
-            /*
-            ex.
-            max_width = 16
+            let space_num = max_width as usize - nums_char;
+            let mut space = "".to_string();
+            tmp_str.clear();
 
-            "cccc__.cccc__ccc"
+            // space_num/(i-sp-1) + (j<space_num%(i-sp-1) ? 1 : 0)
 
-            c: charator
-            _: base space
-            .: additional space
-
-            */
-
-            // push the words into the result with padding space between the words
-            let num_words = idx - sp;
-            let total_space = max_width as usize + num_words - num_alphabet;
-            let mut base = 0;
-            let mut base_space = "".to_string();
-            let mut addi = 0;
-
-            match num_words {
-                1 => {
-                    base_space = (0..total_space).fold("".to_string(), |mut s, _| {
-                        s.push(' ');
-                        s
-                    });
-                }
-                _ => {
-                    // println!("total_space: {}",total_space);
-                    base = total_space / (num_words - 1);
-                    base_space = (0..base).fold("".to_string(), |mut s, _| {
-                        s.push(' ');
-                        s
-                    });
-                    addi = total_space % (num_words - 1);
-                }
+            tmp_str.push_str(&words[sp]);
+            for j in sp + 1..i {
+                tmp_str.push_str({
+                    space = match i - sp {
+                        0 => "".to_string(),
+                        1 => (0..space_num).fold("".to_string(), |mut buf, _| {
+                            buf.push(' ');
+                            buf
+                        }),
+                        _ => match j - sp - 1 < space_num % (i - sp - 1) {
+                            true => (0..space_num / (i - sp - 1) + 1).fold(
+                                "".to_string(),
+                                |mut buf, _| {
+                                    buf.push(' ');
+                                    buf
+                                },
+                            ),
+                            false => {
+                                (0..space_num / (i - sp - 1)).fold("".to_string(), |mut buf, _| {
+                                    buf.push(' ');
+                                    buf
+                                })
+                            }
+                        },
+                    };
+                    &space
+                });
+                tmp_str.push_str(&words[j]);
             }
 
-            let mut tmp = "".to_string();
-            for i in 0..num_words {
-                tmp.push_str(&words[sp + i]);
-                if i == num_words - 1 {
-                    if i == 0 {
-                        tmp.push_str(&base_space);
-                    }
-                    break;
-                }
-                tmp.push_str(&base_space);
-                if i < addi {
-                    tmp.push_str(" ")
-                }
-            }
+            // padding space for inline singal word
+            tmp_str.push_str(&(tmp_str.len()..max_width as usize).fold(
+                "".to_string(),
+                |mut buf, _| {
+                    buf.push(' ');
+                    buf
+                },
+            ));
 
-            res.push(tmp);
-            sp = idx;
-            // println!("res: {:?}", res);
+            // record the formatted string
+            res.push(tmp_str.to_string());
+
+            // set next iter initial metadata
+            nums_char = s.len();
+            sp = i;
         }
+
+        tmp_str.clear();
+        for s in words[sp..].into_iter() {
+            if tmp_str.len() > 0 {
+                tmp_str.push(' ');
+            }
+            tmp_str.push_str(s);
+        }
+        tmp_str.push_str(&(tmp_str.len()..max_width as usize).fold(
+            "".to_string(),
+            |mut buf, _| {
+                buf.push(' ');
+                buf
+            },
+        ));
+        res.push(tmp_str);
         res
     }
 }
