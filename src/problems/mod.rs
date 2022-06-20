@@ -23,3 +23,4 @@ pub mod no68_text_justification;
 pub mod no69_sqrt;
 pub mod no70_climbing_stairs;
 pub mod no71_simplify_path;
+pub mod no72_edit_distance;
