@@ -26,3 +26,4 @@ pub mod no71_simplify_path;
 pub mod no72_edit_distance;
 pub mod no73_set_matrix_zeros;
 pub mod no74_search_matrix;
+pub mod no75_sort_colors;
