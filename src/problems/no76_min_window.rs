@@ -9,10 +9,12 @@ impl Solution {
         let mut map = HashMap::<u8, i32>::new();
         let mut n_free = t.len() as i32;
         let (mut len, mut pos) = (s.len(), 0);
+        // create target map
         for &b in t_byte {
             let count = map.entry(b).or_insert(0);
             *count += 1;
         }
+        // create window to record target char index
         let mut window = VecDeque::<usize>::new();
         for (i, b) in s_byte.iter().enumerate() {
             if let Some(count) = map.get_mut(b) {
@@ -22,6 +24,7 @@ impl Solution {
                     n_free -= 1;
                 }
 
+                // shrink left side
                 while let Some(&idx) = window.front() {
                     let cur_count = map.get_mut(&s_byte[idx]).unwrap();
                     if *cur_count < 0 {
@@ -31,7 +34,9 @@ impl Solution {
                         break;
                     }
                 }
-                if n_free == 0 {
+
+                // check and update minimum substring left index and length
+                if n_free == 0 { // this mean input string is valid
                     let cur_len = i - *window.front().unwrap();
                     if cur_len < len {
                         len = cur_len;
