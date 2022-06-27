@@ -29,3 +29,4 @@ pub mod no74_search_matrix;
 pub mod no75_sort_colors;
 pub mod no76_min_window;
 pub mod no77_combine;
+pub mod no78_subsets;

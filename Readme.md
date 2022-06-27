@@ -1,4 +1,4 @@
 # Change log
 
 # Todo
-- [ ] no76. (time limit error)
+- [x] no76. (time limit error)
