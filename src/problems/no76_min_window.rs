@@ -1,57 +1,50 @@
-use std::collections::HashMap;
+use std::collections::{VecDeque, HashMap};
 
 pub struct Solution {}
-
-type HashTable = HashMap<char, usize>;
-
 impl Solution {
-    fn find_right_bound(table: &HashTable, s: &str) -> usize {
-        if table.contains_key(&s.chars().nth(0).unwrap()) {
-            let mut table = table.clone();
-            for (i, c) in s.chars().into_iter().enumerate() {
-                if table.contains_key(&c) {
-                    if *table.get(&c).unwrap()>1 {
-                        *table.get_mut(&c).unwrap()-=1;
+    // ref. https://leetcode.com/problems/minimum-window-substring/discuss/2142884/rust-solution
+    pub fn min_window(s: String, t: String) -> String {
+        let s_byte = s.as_bytes();
+        let t_byte = t.as_bytes();
+        let mut map = HashMap::<u8, i32>::new();
+        let mut n_free = t.len() as i32;
+        let (mut len, mut pos) = (s.len(), 0);
+        for &b in t_byte {
+            let count = map.entry(b).or_insert(0);
+            *count += 1;
+        }
+        let mut window = VecDeque::<usize>::new();
+        for (i, b) in s_byte.iter().enumerate() {
+            if let Some(count) = map.get_mut(b) {
+                *count -= 1;
+                window.push_back(i);
+                if *count >= 0 {
+                    n_free -= 1;
+                }
+
+                while let Some(&idx) = window.front() {
+                    let cur_count = map.get_mut(&s_byte[idx]).unwrap();
+                    if *cur_count < 0 {
+                        *cur_count += 1;
+                        window.pop_front();
                     } else {
-                        table.remove(&c);
+                        break;
                     }
                 }
-    
-                if table.keys().len()==0 {
-                    return i;
+                if n_free == 0 {
+                    let cur_len = i - *window.front().unwrap();
+                    if cur_len < len {
+                        len = cur_len;
+                        pos = i;
+                    }
                 }
             }
         }
-        usize::MAX
-    }
-
-    pub fn min_window(s: String, t: String) -> String {
-        // get target hashtable
-        let mut table: HashTable = HashMap::new();  // (desire, current)
-        for c in t.chars().into_iter() {
-            *table.entry(c).or_insert(0) += 1;
+        if len == s.len() {
+            "".to_owned()
+        } else {
+            String::from(&s[pos - len..pos + 1])
         }
-
-        // truncate string
-        let left = s.chars().into_iter().position(|c| table.contains_key(&c)).unwrap();
-        let right = s.len()-s.chars().into_iter().rev().position(|c| table.contains_key(&c)).unwrap();
-
-        let s = &s[left..right];
-
-        let mut dp: Vec<usize> = Vec::new();
-        if let Some(n) = s.len().checked_sub(t.len()) {
-            for i in 0..n+1 {
-                dp.push(Solution::find_right_bound(&table, &s[i..]));
-            }
-
-            let &target = dp.iter().min().unwrap();
-            if target<=s.len() {
-                let left = dp.iter().position(|&x| x==target).unwrap();
-                let right = left+target+1;
-                return (&s[left..right]).to_string()
-            }
-        }
-        "".to_string()
     }
 }
 
