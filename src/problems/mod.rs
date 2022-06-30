@@ -34,3 +34,4 @@ pub mod no79_word_search;
 pub mod no80_remove_duplicates_from_sorted_array_ii;
 pub mod no81_search_in_rotated_sorted_array_ii;
 pub mod no82_remove_duplicates_from_sorted_list_ii;
+pub mod no83_remove_duplicates_from_sorted_list;
