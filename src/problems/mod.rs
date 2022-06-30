@@ -31,4 +31,5 @@ pub mod no76_min_window;
 pub mod no77_combine;
 pub mod no78_subsets;
 pub mod no79_word_search;
-pub mod no80_remove_duplicates_from_sorted_array_II;
+pub mod no80_remove_duplicates_from_sorted_array_ii;
+pub mod no81_search_in_rotated_sorted_array_ii;
