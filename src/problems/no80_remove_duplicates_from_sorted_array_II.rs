@@ -1,3 +1,56 @@
+/*
+ideal:
+
+init:
+p=0; i=1; d=f;  // d: is_duplicate
+
+step 0
+1 1 1 2 2 3
+  p i
+d: t
+
+step 1
+1 1 1 2 2 3
+  p   i
+d: t
+
+step 2
+1. move p
+{
+    1 1 1 2 2 3
+        p i
+    d: t
+}
+
+2. if d==true {swap it}
+1 1 2 1 2 3
+    p i
+d: t
+
+3. move i and update d
+1 1 2 1 2 3
+    p   i
+d: f
+
+step 3
+1. move p
+{
+    1 1 2 1 2 3
+          p i
+    d: f
+}
+
+2. if d==false {swap it}
+1 1 2 2 1 3
+      p i
+d: f
+
+3. move i and update d
+1 1 2 2 1 3
+      p   i
+d: f
+*/
+
 pub struct Solution {}
 impl Solution {
     pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
