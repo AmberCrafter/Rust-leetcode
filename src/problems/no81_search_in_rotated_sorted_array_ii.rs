@@ -1,7 +1,16 @@
 pub struct Solution {}
 impl Solution {
     pub fn search(nums: Vec<i32>, target: i32) -> bool {
-        nums.contains(&target)
+        if nums[0]< target {
+            for v in nums.iter() {
+                if v==&target {return true}
+            }
+        } else {
+            for v in nums.iter().rev() {
+                if v==&target {return true}
+            }
+        }
+        false
     }
 }
 
