@@ -1,24 +1,23 @@
 pub struct Solution {}
 impl Solution {
-    pub fn largest_rectangle_area(heights: Vec<i32>) -> i32 {
-        // dp
-        // table record maxiumn area and output the last value
-
-        let lenght = heights.len() + 1;
-
-        let mut area_table = vec![vec![0; lenght]; lenght];
+    //ref. https://leetcode.com/problems/largest-rectangle-in-histogram/discuss/734976/Python-Rust-Stack-Solution
+    pub fn largest_rectangle_area(mut heights: Vec<i32>) -> i32 {
+        let mut res: i32 = 0;
+        let mut stack: Vec<usize> = Vec::new();
+        heights.push(0);
+        heights.insert(0, 0);
         
-        for r in 1..lenght {
-            let mut h = heights[r-1];
-            for c in r..lenght {
-                h = h.min(heights[c-1]);
-                area_table[r][c] = (h * (c - r + 1) as i32)
-                    .max(area_table[r - 1][c])
-                    .max(area_table[r][c - 1]);
+        for (i, h) in heights.iter().enumerate() {
+            while stack.len() > 0 && heights[*stack.iter().last().unwrap()] > *h {
+                let j = stack.pop().unwrap();
+                let width = (i - stack[stack.len() - 1] - 1) as i32;
+                let size = width * heights[j];
+                res = res.max(size);
             }
+            stack.push(i);
         }
-
-        area_table.last().unwrap().last().unwrap().to_owned()
+        
+        return res;
     }
 }
 
