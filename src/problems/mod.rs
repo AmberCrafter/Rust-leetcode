@@ -36,3 +36,4 @@ pub mod no81_search_in_rotated_sorted_array_ii;
 pub mod no82_remove_duplicates_from_sorted_list_ii;
 pub mod no83_remove_duplicates_from_sorted_list;
 pub mod no84_largest_rectangle_in_histogram;
+pub mod no85_maximal_rectangle;
