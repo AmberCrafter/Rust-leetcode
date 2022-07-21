@@ -39,3 +39,4 @@ pub mod no84_largest_rectangle_in_histogram;
 pub mod no85_maximal_rectangle;
 pub mod no86_partition_list;
 pub mod no87_scramble_string;
+pub mod no88_merge_sorted_array;
