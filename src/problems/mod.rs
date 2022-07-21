@@ -38,3 +38,4 @@ pub mod no83_remove_duplicates_from_sorted_list;
 pub mod no84_largest_rectangle_in_histogram;
 pub mod no85_maximal_rectangle;
 pub mod no86_partition_list;
+pub mod no87_scramble_string;
