@@ -41,3 +41,5 @@ pub mod no86_partition_list;
 pub mod no87_scramble_string;
 pub mod no88_merge_sorted_array;
 pub mod no89_gray_code;
+pub mod no90_subsets_ii;
+pub mod no91_decode_ways;
