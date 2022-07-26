@@ -20,12 +20,12 @@ impl TreeNode {
   }
 }
 impl Solution {
-    pub fn inorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
+    pub fn preorder_traversal(root: Option<Rc<RefCell<TreeNode>>>) -> Vec<i32> {
         fn unpack(stack: &mut Vec<i32>, tree: Rc<RefCell<TreeNode>>) {
+            stack.push(tree.borrow().val);
             if let Some(node) = &tree.borrow().left {
                 unpack(stack, Rc::clone(node));
             }
-            stack.push(tree.borrow().val);
             if let Some(node) = &tree.borrow().right {
                 unpack(stack, Rc::clone(node));
             }
@@ -56,8 +56,8 @@ mod test {
                 right: None
             })))
         })));
-        let except = vec![1,3,2];
-        let output = Solution::inorder_traversal(inputs);
+        let except = vec![1,2,3];
+        let output = Solution::preorder_traversal(inputs);
         assert_eq!(except, output);
     }
 
@@ -65,7 +65,7 @@ mod test {
     fn case2() {
         let inputs = None;
         let except = Vec::<i32>::new();
-        let output = Solution::inorder_traversal(inputs);
+        let output = Solution::preorder_traversal(inputs);
         assert_eq!(except, output);
     }
 
@@ -77,7 +77,7 @@ mod test {
             right: None
         })));
         let except = vec![1];
-        let output = Solution::inorder_traversal(inputs);
+        let output = Solution::preorder_traversal(inputs);
         assert_eq!(except, output);
     }
 }
