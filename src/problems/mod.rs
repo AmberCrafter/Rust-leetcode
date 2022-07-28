@@ -50,6 +50,7 @@ pub mod no95_unique_binary_search_trees_ii;
 pub mod no96_unique_binary_search_trees;
 pub mod no97_interleaving_string;
 pub mod no98_validate_binary_search_tree;
+pub mod no99_recover_binary_search_tree;
 
 pub mod no144_binary_tree_preorder_traversal;
 pub mod no145_binary_tree_postorder_traversal;
