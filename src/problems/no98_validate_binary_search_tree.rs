@@ -33,23 +33,6 @@ impl Solution {
                         return false
                     }
 
-                // if node.val
-                //     < node
-                //         .left
-                //         .as_ref()
-                //         .unwrap_or(&Rc::new(RefCell::new(TreeNode::new(i32::MIN))))
-                //         .borrow()
-                //         .val
-                //     || node.val
-                //         > node
-                //             .right
-                //             .as_ref()
-                //             .unwrap_or(&Rc::new(RefCell::new(TreeNode::new(i32::MAX))))
-                //             .borrow()
-                //             .val
-                // {
-                //     return false;
-                // }
                 (if let Some(rcnode) = node.left.as_ref() {
                     smaller.push(node.val);
                     let res = checker(Some(Rc::clone(rcnode)), smaller, larger);
