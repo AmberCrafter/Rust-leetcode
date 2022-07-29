@@ -53,6 +53,7 @@ pub mod no98_validate_binary_search_tree;
 pub mod no99_recover_binary_search_tree;
 pub mod no100_same_tree;
 pub mod no101_symmetric_tree;
+pub mod no102_binary_tree_level_order_traversal;
 
 pub mod no144_binary_tree_preorder_traversal;
 pub mod no145_binary_tree_postorder_traversal;
