@@ -57,6 +57,8 @@ pub mod no102_binary_tree_level_order_traversal;
 pub mod no103_binary_tree_zigzag_level_order_traversal;
 pub mod no104_maximum_depth_of_binary_tree;
 pub mod no105_construct_binary_tree_from_preorder_and_inorder_traversal;
+pub mod no106_construct_binary_tree_from_inorder_and_postorder_traversal;
+pub mod no107_binary_tree_level_order_traversal_ii;
 
 pub mod no144_binary_tree_preorder_traversal;
 pub mod no145_binary_tree_postorder_traversal;
