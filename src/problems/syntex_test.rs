@@ -1,8 +1,7 @@
-
 #[derive(Debug)]
 struct ListNode {
     val: i32,
-    next: Option<Box<ListNode>>
+    next: Option<Box<ListNode>>,
 }
 
 impl ListNode {
@@ -10,7 +9,6 @@ impl ListNode {
         Some(Box::new(ListNode { val, next: None }))
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -22,23 +20,20 @@ mod tests {
             val: 1,
             next: Some(Box::new(ListNode {
                 val: 2,
-                next: Some(Box::new(ListNode {
-                    val: 3,
-                    next: None
-                }))
-            }))
+                next: Some(Box::new(ListNode { val: 3, next: None })),
+            })),
         }));
 
-        // reverse the node 
+        // reverse the node
         let mut node = node;
         let next = node.as_mut().unwrap().next.take();
 
         // let new_node = node;
         println!("node: {:?}", node);
         println!("next: {:?}", next);
-        println!("{}",5%7);
-        println!("{}",15%7);
-        println!("{}",35%7);
-        println!("{}",85%7);
+        println!("{}", 5 % 7);
+        println!("{}", 15 % 7);
+        println!("{}", 35 % 7);
+        println!("{}", 85 % 7);
     }
 }

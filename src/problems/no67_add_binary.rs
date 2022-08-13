@@ -14,27 +14,29 @@ impl Solution {
         while (ai > 0) || (bi > 0) {
             let mut adder: u8 = 0;
             if ai > 0 {
-                adder += match a[ai-1] {
-                    val => val-48,
+                adder += match a[ai - 1] {
+                    val => val - 48,
                     _ => 0,
                 };
-                ai-=1;
+                ai -= 1;
             }
 
             if bi > 0 {
-                adder += match b[bi-1] {
-                    val => val-48,
+                adder += match b[bi - 1] {
+                    val => val - 48,
                     _ => 0,
                 };
-                bi-=1;
+                bi -= 1;
             }
             adder += c;
 
-            tmp.push_str(&(adder%2).to_string());
-            c = adder/2;
+            tmp.push_str(&(adder % 2).to_string());
+            c = adder / 2;
         }
-        
-        if c>0 {tmp.push_str("1")};
+
+        if c > 0 {
+            tmp.push_str("1")
+        };
 
         tmp.chars().rev().collect()
     }

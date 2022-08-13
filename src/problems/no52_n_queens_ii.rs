@@ -59,7 +59,9 @@ impl CheeseBoard {
             if self.board[x][y] == Chess::Queen {
                 return false;
             }
-            if y==0 {break}
+            if y == 0 {
+                break;
+            }
             x += 1;
             y -= 1;
         }
@@ -95,8 +97,8 @@ impl Solution {
         if board.put_queen(row, col) {
             Solution::dfs_player(result, board, row + 1, 0);
             board.take_queen(row, col);
-        } 
-        if col<board.size-1 {
+        }
+        if col < board.size - 1 {
             Solution::dfs_player(result, board, row, col + 1);
         }
     }

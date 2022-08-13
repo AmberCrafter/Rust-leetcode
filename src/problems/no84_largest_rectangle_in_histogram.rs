@@ -6,7 +6,7 @@ impl Solution {
         let mut stack: Vec<usize> = Vec::new();
         heights.push(0);
         heights.insert(0, 0);
-        
+
         for (i, h) in heights.iter().enumerate() {
             while stack.len() > 0 && heights[*stack.iter().last().unwrap()] > *h {
                 let j = stack.pop().unwrap();
@@ -16,7 +16,7 @@ impl Solution {
             }
             stack.push(i);
         }
-        
+
         return res;
     }
 }

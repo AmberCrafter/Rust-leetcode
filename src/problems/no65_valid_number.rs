@@ -36,7 +36,7 @@ impl Solution {
                     } else {
                         false
                     }
-                },
+                }
                 '.' => {
                     if !float_point_tag {
                         float_point_tag = true;
@@ -44,9 +44,16 @@ impl Solution {
                     } else {
                         false
                     }
-                },
+                }
                 'e' | 'E' => false,
-                _ => if has_digit {true} else {has_digit=true; true},
+                _ => {
+                    if has_digit {
+                        true
+                    } else {
+                        has_digit = true;
+                        true
+                    }
+                }
             };
         }
         res && has_digit

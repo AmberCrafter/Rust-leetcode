@@ -5,9 +5,13 @@ impl Solution {
         // foward tacing
         let mut remain = 0;
         for value in nums {
-            if remain<0 {return  false;}
-            if value > remain {remain=value};
-            remain-=1;
+            if remain < 0 {
+                return false;
+            }
+            if value > remain {
+                remain = value
+            };
+            remain -= 1;
         }
         return true;
     }
@@ -19,7 +23,7 @@ mod tests {
 
     #[test]
     fn case_1() {
-        let inputs = [2,3,1,1,4].to_vec();
+        let inputs = [2, 3, 1, 1, 4].to_vec();
         let expected = true;
         let result = Solution::can_jump(inputs);
 
@@ -28,7 +32,7 @@ mod tests {
 
     #[test]
     fn case_2() {
-        let inputs = [3,2,1,0,4].to_vec();
+        let inputs = [3, 2, 1, 0, 4].to_vec();
         let expected = false;
         let result = Solution::can_jump(inputs);
 

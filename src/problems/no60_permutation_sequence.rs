@@ -2,13 +2,13 @@ pub struct Solution {}
 
 impl Solution {
     // ref. https://www.cnblogs.com/grandyang/p/4358678.html
-    /* note. 
+    /* note.
     ex.
     n = 5
     k = 6
     arr = [1,2,3,4,5]
     res = [_,_,_,_,_]
-    
+
     ----------------------------------------------------------------------------------------------------
     由於此permutation method 會優先調整陣列尾部的數字，因此前頭的數字會存在連續出現的次數，可由排列組合判定關係
     [1,_,_,_,_]
@@ -47,7 +47,7 @@ impl Solution {
     b 排序 6 次，共 12 次
     c 排序 5 次，共 17 次
     故可得知填入值為c
-    
+
 
     以此循環往覆，可以判斷在特定排列序號下，各個欄位的數值。
     */
@@ -73,7 +73,7 @@ mod tests {
 
     #[test]
     fn case_1() {
-        let inputs = (3,3);
+        let inputs = (3, 3);
         let expected = "213".to_string();
         let result = Solution::get_permutation(inputs.0, inputs.1);
 
@@ -82,17 +82,16 @@ mod tests {
 
     #[test]
     fn case_2() {
-        let inputs = (4,9);
+        let inputs = (4, 9);
         let expected = "2314".to_string();
         let result = Solution::get_permutation(inputs.0, inputs.1);
 
         assert_eq!(expected, result);
     }
 
-    
     #[test]
     fn case_3() {
-        let inputs = (3,1);
+        let inputs = (3, 1);
         let expected = "123".to_string();
         let result = Solution::get_permutation(inputs.0, inputs.1);
 

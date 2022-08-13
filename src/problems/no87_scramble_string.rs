@@ -13,12 +13,12 @@ impl Solution {
         // s1: i, j
         // s1 -> val: l
         for (i, val) in s1.iter().enumerate() {
-            for l in 0..val.len()-1 {
+            for l in 0..val.len() - 1 {
                 let mut next_stack = Vec::new();
                 let mut next_stack_swap = Vec::new();
                 for j in 0..s1.len() {
                     if i == j && val.len() > 1 {
-                        let (p1, p2) = val.split_at(l+1);
+                        let (p1, p2) = val.split_at(l + 1);
                         next_stack.push(p1.to_string());
                         next_stack.push(p2.to_string());
                         next_stack_swap.push(p2.to_string());
@@ -40,11 +40,22 @@ impl Solution {
 
     fn discussion_dp(s1: String, s2: String) -> bool {
         // ref https://leetcode.com/problems/scramble-string/discuss/2278190/Rust-Dynamic-Programming
-        fn check(s1: &Vec<char>, s2: &Vec<char>, i: usize, j: usize, len: usize, dp: &mut Vec<Vec<Vec<i32>>>) -> i32 {
-            if dp[i][j][len] != -1 {return dp[i][j][len]};
+        fn check(
+            s1: &Vec<char>,
+            s2: &Vec<char>,
+            i: usize,
+            j: usize,
+            len: usize,
+            dp: &mut Vec<Vec<Vec<i32>>>,
+        ) -> i32 {
+            if dp[i][j][len] != -1 {
+                return dp[i][j][len];
+            };
             let mut same = true;
             for k in 0..len {
-                if s1[i+k]==s2[j+k] {continue;}
+                if s1[i + k] == s2[j + k] {
+                    continue;
+                }
                 same = false;
                 break;
             }
@@ -55,25 +66,28 @@ impl Solution {
 
             for k in 1..len {
                 // swap case
-                if check(s1,s2,i,j+len-k,k,dp)==1 && check(s1,s2,i+k,j,len-k,dp)==1 {
+                if check(s1, s2, i, j + len - k, k, dp) == 1
+                    && check(s1, s2, i + k, j, len - k, dp) == 1
+                {
                     dp[i][j][len] = 1;
                     return dp[i][j][len];
                 }
 
                 // regular case
-                if check(s1,s2,i,j,k,dp)==1 && check(s1,s2,i+k,j+k,len-k,dp)==1 {
-                    dp[i][j][len]=1;
+                if check(s1, s2, i, j, k, dp) == 1 && check(s1, s2, i + k, j + k, len - k, dp) == 1
+                {
+                    dp[i][j][len] = 1;
                     return dp[i][j][len];
                 }
             }
-            dp[i][j][len]=0;
+            dp[i][j][len] = 0;
             dp[i][j][len]
         }
 
         let n = s1.len();
         let s1 = s1.chars().collect::<Vec<char>>();
         let s2 = s2.chars().collect::<Vec<char>>();
-        let mut dp = vec![vec![vec![-1; n+1];n];n];
+        let mut dp = vec![vec![vec![-1; n + 1]; n]; n];
 
         check(&s1, &s2, 0, 0, n, &mut dp) == 1
     }

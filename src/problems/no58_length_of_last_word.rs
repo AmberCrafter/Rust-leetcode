@@ -1,4 +1,3 @@
-
 pub struct Solution {}
 
 impl Solution {
@@ -6,11 +5,11 @@ impl Solution {
         let mut res = 0;
         for c in s.chars().rev() {
             if c == ' ' {
-                if res>0 {
-                    break
+                if res > 0 {
+                    break;
                 }
             } else {
-                res+=1;
+                res += 1;
             }
         }
         res
@@ -47,5 +46,4 @@ mod tests {
 
         assert_eq!(expected, result);
     }
-
 }

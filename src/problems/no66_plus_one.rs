@@ -10,7 +10,9 @@ impl Solution {
             digits[idx as usize] = tmp % 10;
             idx -= 1;
         }
-        if c>0 {digits.insert(0, c)};
+        if c > 0 {
+            digits.insert(0, c)
+        };
         digits
     }
 }
@@ -19,16 +21,16 @@ mod test {
     use super::*;
     #[test]
     fn case1() {
-        let inputs = vec![1,2,3];
-        let except = vec![1,2,4];
+        let inputs = vec![1, 2, 3];
+        let except = vec![1, 2, 4];
         let result = Solution::plus_one(inputs);
         assert_eq!(except, result);
     }
 
     #[test]
     fn case2() {
-        let inputs = vec![4,3,2,1];
-        let except = vec![4,3,2,2];
+        let inputs = vec![4, 3, 2, 1];
+        let except = vec![4, 3, 2, 2];
         let result = Solution::plus_one(inputs);
         assert_eq!(except, result);
     }
@@ -36,7 +38,7 @@ mod test {
     #[test]
     fn case3() {
         let inputs = vec![9];
-        let except = vec![1,0];
+        let except = vec![1, 0];
         let result = Solution::plus_one(inputs);
         assert_eq!(except, result);
     }

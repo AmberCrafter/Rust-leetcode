@@ -10,7 +10,7 @@ impl Solution {
         let n1 = word1.len();
         let n2 = word2.len();
 
-        let mut dp = vec![vec![0;n2+1];n1+1];
+        let mut dp = vec![vec![0; n2 + 1]; n1 + 1];
 
         // set insert step
         for i in 1..=n2 {
@@ -25,10 +25,10 @@ impl Solution {
         // calc total step
         for i in 1..=n1 {
             for j in 1..=n2 {
-                if word1.chars().nth(i-1) == word2.chars().nth(j-1) {
-                    dp[i][j] = 0 + dp[i-1][j-1];
+                if word1.chars().nth(i - 1) == word2.chars().nth(j - 1) {
+                    dp[i][j] = 0 + dp[i - 1][j - 1];
                 } else {
-                    dp[i][j] = 1 + dp[i-1][j-1].min(dp[i][j-1].min(dp[i-1][j]));
+                    dp[i][j] = 1 + dp[i - 1][j - 1].min(dp[i][j - 1].min(dp[i - 1][j]));
                 }
             }
         }

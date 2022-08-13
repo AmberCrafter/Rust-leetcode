@@ -14,8 +14,7 @@ impl Solution {
                 .or_insert(vec![s]);
         }
 
-        map
-            .into_iter()
+        map.into_iter()
             .map(|(_, value)| value)
             .collect::<Vec<Vec<String>>>()
     }
@@ -28,8 +27,11 @@ mod tests {
     #[test]
     fn case_1() {
         let inputs = vec!["abc".to_string(), "edf".to_string(), "bac".to_string()];
-        let expected = vec![["abc".to_string(),"bac".to_string()].to_vec(), ["edf".to_string()].to_vec()];
+        let expected = vec![
+            ["abc".to_string(), "bac".to_string()].to_vec(),
+            ["edf".to_string()].to_vec(),
+        ];
         let result = Solution::group_anagrams(inputs);
-        assert_eq!(expected,result);
+        assert_eq!(expected, result);
     }
 }

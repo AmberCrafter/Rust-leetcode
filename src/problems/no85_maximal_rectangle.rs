@@ -5,10 +5,10 @@ impl Solution {
         if matrix.len() == 0 {
             return 0;
         }
-        
+
         let mut res = 0;
-        let mut histogram: Vec<i32> = vec![ 0; (matrix[0].len() + 2) ];
-        
+        let mut histogram: Vec<i32> = vec![0; (matrix[0].len() + 2)];
+
         for row in matrix.iter() {
             for (i, val) in row.iter().enumerate() {
                 if *val == '0' {
@@ -19,14 +19,14 @@ impl Solution {
             }
             res = res.max(Self::maxInHistogram(&histogram));
         }
-        
+
         return res;
     }
-    
+
     pub fn maxInHistogram(hist: &Vec<i32>) -> i32 {
         let mut res: i32 = 0;
         let mut stack: Vec<usize> = vec![];
-        
+
         for (i, val) in hist.iter().enumerate() {
             while stack.len() > 0 && hist[*stack.iter().last().unwrap()] > *val {
                 let j = stack.pop().unwrap();
@@ -35,7 +35,7 @@ impl Solution {
             }
             stack.push(i);
         }
-        
+
         return res;
     }
 }

@@ -45,7 +45,10 @@ impl Solution {
                 return false;
             }
         }
-        checker(root.as_ref().unwrap().borrow().left.clone(), root.as_ref().unwrap().borrow().right.clone())
+        checker(
+            root.as_ref().unwrap().borrow().left.clone(),
+            root.as_ref().unwrap().borrow().right.clone(),
+        )
     }
 }
 #[cfg(test)]
@@ -59,23 +62,27 @@ mod test {
                 val: 2,
                 left: Some(Rc::new(RefCell::new(TreeNode {
                     val: 3,
-                    left: None, right: None
+                    left: None,
+                    right: None,
                 }))),
                 right: Some(Rc::new(RefCell::new(TreeNode {
                     val: 4,
-                    left: None, right: None
-                })))
+                    left: None,
+                    right: None,
+                }))),
             }))),
             right: Some(Rc::new(RefCell::new(TreeNode {
                 val: 2,
                 left: Some(Rc::new(RefCell::new(TreeNode {
                     val: 4,
-                    left: None, right: None
+                    left: None,
+                    right: None,
                 }))),
                 right: Some(Rc::new(RefCell::new(TreeNode {
                     val: 3,
-                    left: None, right: None
-                })))
+                    left: None,
+                    right: None,
+                }))),
             }))),
         })));
         let except = true;
@@ -92,16 +99,18 @@ mod test {
                 left: None,
                 right: Some(Rc::new(RefCell::new(TreeNode {
                     val: 3,
-                    left: None, right: None
-                })))
+                    left: None,
+                    right: None,
+                }))),
             }))),
             right: Some(Rc::new(RefCell::new(TreeNode {
                 val: 2,
                 left: None,
                 right: Some(Rc::new(RefCell::new(TreeNode {
                     val: 3,
-                    left: None, right: None
-                })))
+                    left: None,
+                    right: None,
+                }))),
             }))),
         })));
         let except = false;

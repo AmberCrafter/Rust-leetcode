@@ -1,18 +1,15 @@
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
-  pub val: i32,
-  pub next: Option<Box<ListNode>>
+    pub val: i32,
+    pub next: Option<Box<ListNode>>,
 }
 
 impl ListNode {
-  #[inline]
-  fn new(val: i32) -> Self {
-    ListNode {
-      next: None,
-      val
+    #[inline]
+    fn new(val: i32) -> Self {
+        ListNode { next: None, val }
     }
-  }
 }
 
 pub struct Solution {}
@@ -29,10 +26,10 @@ impl Solution {
         let mut skip_value = i32::MAX;
         let mut node = None;
         for i in (1..buf.len()).rev() {
-            if buf[i]!=buf[i-1] && buf[i]!=skip_value {
+            if buf[i] != buf[i - 1] && buf[i] != skip_value {
                 node = Some(Box::new(ListNode {
                     next: node,
-                    val: buf[i]
+                    val: buf[i],
                 }));
             } else {
                 skip_value = buf[i];
@@ -44,10 +41,10 @@ impl Solution {
             0 => node,
             1 => Some(Box::new(ListNode::new(buf[0]))),
             _ => {
-                if buf[0]!=buf[1] {
+                if buf[0] != buf[1] {
                     node = Some(Box::new(ListNode {
                         next: node,
-                        val: buf[0]
+                        val: buf[0],
                     }));
                 };
                 node
@@ -63,28 +60,23 @@ mod test {
     fn gen_listnode(array: Vec<i32>) -> Option<Box<ListNode>> {
         let mut node = None;
         for &v in array.iter().rev() {
-            node = Some(Box::new(
-                ListNode {
-                    next: node,
-                    val: v
-                }
-            ));
-        };
+            node = Some(Box::new(ListNode { next: node, val: v }));
+        }
         node
     }
 
     #[test]
     fn case1() {
-        let inputs = gen_listnode(vec![1,2,3,3,4,4,5]);
-        let except = gen_listnode(vec![1,2,5]);
+        let inputs = gen_listnode(vec![1, 2, 3, 3, 4, 4, 5]);
+        let except = gen_listnode(vec![1, 2, 5]);
         let output = Solution::delete_duplicates(inputs);
         assert_eq!(except, output);
     }
 
     #[test]
     fn case2() {
-        let inputs = gen_listnode(vec![1,1,1,2,3]);
-        let except = gen_listnode(vec![2,3]);
+        let inputs = gen_listnode(vec![1, 1, 1, 2, 3]);
+        let except = gen_listnode(vec![2, 3]);
         let output = Solution::delete_duplicates(inputs);
         assert_eq!(except, output);
     }

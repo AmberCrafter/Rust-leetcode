@@ -9,32 +9,36 @@ impl Solution {
         let (mut t, mut b) = (0, n as usize - 1);
         let mut value = 1;
 
-        while r>=l && b>=t {
+        while r >= l && b >= t {
             for i in l..=r {
                 res[t][i] = value;
-                value+=1;
+                value += 1;
             }
-            t+=1;
+            t += 1;
 
             for i in t..=b {
                 res[i][r] = value;
-                value+=1;
+                value += 1;
             }
-            if r==0 {break}
-            r-=1;
+            if r == 0 {
+                break;
+            }
+            r -= 1;
 
             for i in (l..=r).rev() {
                 res[b][i] = value;
-                value+=1;
+                value += 1;
             }
-            if b==0 {break}
-            b-=1;
+            if b == 0 {
+                break;
+            }
+            b -= 1;
 
             for i in (t..=b).rev() {
                 res[i][l] = value;
-                value+=1;
+                value += 1;
             }
-            l+=1;
+            l += 1;
         }
         res
     }
@@ -47,7 +51,7 @@ mod tests {
     #[test]
     fn case_1() {
         let inputs = 3;
-        let expected = [[1,2,3].to_vec(),[8,9,4].to_vec(),[7,6,5].to_vec()].to_vec();
+        let expected = [[1, 2, 3].to_vec(), [8, 9, 4].to_vec(), [7, 6, 5].to_vec()].to_vec();
         let result = Solution::generate_matrix(inputs);
 
         assert_eq!(expected, result);

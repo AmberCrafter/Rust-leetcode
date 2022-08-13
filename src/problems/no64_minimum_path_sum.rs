@@ -15,10 +15,10 @@ impl Solution {
 
         for i in 1..m {
             for j in 1..n {
-                grid[i][j] += grid[i-1][j].min(grid[i][j-1]);
+                grid[i][j] += grid[i - 1][j].min(grid[i][j - 1]);
             }
         }
-        grid[m-1][n-1]
+        grid[m - 1][n - 1]
     }
 }
 
@@ -27,11 +27,7 @@ mod test {
     use super::*;
     #[test]
     fn case1() {
-        let inputs = vec![
-            vec![1,3,1],
-            vec![1,5,1],
-            vec![4,2,1]
-        ];
+        let inputs = vec![vec![1, 3, 1], vec![1, 5, 1], vec![4, 2, 1]];
         let except = 7;
         let result = Solution::min_path_sum(inputs);
         assert_eq!(except, result);
@@ -39,10 +35,7 @@ mod test {
 
     #[test]
     fn case2() {
-        let inputs = vec![
-            vec![1,2,3],
-            vec![4,5,6],
-        ];
+        let inputs = vec![vec![1, 2, 3], vec![4, 5, 6]];
         let except = 12;
         let result = Solution::min_path_sum(inputs);
         assert_eq!(except, result);

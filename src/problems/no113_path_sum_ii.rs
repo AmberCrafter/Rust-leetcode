@@ -20,22 +20,55 @@ impl TreeNode {
     }
 }
 impl Solution {
-    pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        fn builder(nums: &[i32]) -> Option<Rc<RefCell<TreeNode>>> {
-            match nums.len() {
-                0 => None,
-                1 => Some(Rc::new(RefCell::new(TreeNode::new(nums[0])))),
-                _ => {
-                    let pivot = nums.len() / 2;
-                    Some(Rc::new(RefCell::new(TreeNode {
-                        val: nums[pivot],
-                        left: builder(&nums[..pivot]),
-                        right: builder(&nums[pivot + 1..]),
-                    })))
+    pub fn path_sum(root: Option<Rc<RefCell<TreeNode>>>, target_sum: i32) -> Vec<Vec<i32>> {
+        // dfs
+        fn helper(
+            res: &mut Vec<Vec<i32>>,
+            tree: &Option<Rc<RefCell<TreeNode>>>,
+            path: &mut Vec<i32>,
+            sum: &mut i32,
+            target_sum: i32,
+        ) {
+            let mut is_leaf = true;
+            let mut val = 0;
+            if let Some(leaf) = tree.as_ref().unwrap().borrow().left.clone() {
+                is_leaf = false;
+                val = (&leaf).borrow().val;
+                *sum += val;
+                path.push(val);
+                helper(res, &Some(leaf), path, sum, target_sum);
+                if let Some(ele) = path.pop() {
+                    *sum -= ele;
+                } else {
+                    panic!("Error: vector pop");
                 }
             }
+            if let Some(leaf) = tree.as_ref().unwrap().borrow().right.clone() {
+                is_leaf = false;
+                val = (&leaf).borrow().val;
+                *sum += val;
+                path.push(val);
+                helper(res, &Some(leaf), path, sum, target_sum);
+                if let Some(ele) = path.pop() {
+                    *sum -= ele;
+                } else {
+                    panic!("Error: vector pop");
+                }
+            }
+            if is_leaf && *sum == target_sum {
+                (*res).push(path.clone());
+            }
         }
-        builder(&nums)
+
+        // init
+        let mut res = Vec::new();
+        if root.is_some() {
+            let mut path = Vec::new();
+            let mut sum = root.as_ref().unwrap().borrow().val;
+            path.push(root.as_ref().unwrap().borrow().val);
+            helper(&mut res, &root, &mut path, &mut sum, target_sum);
+        }
+        res
     }
 }
 
@@ -44,9 +77,12 @@ mod test {
     use super::*;
     #[test]
     fn case1() {
-        let inputs = vec![-10, -3, 0, 5, 9];
-        let except = TreeNode::layer_gen(vec![0, -3, 9, -10, -99, 5]);
-        let output = Solution::sorted_array_to_bst(inputs);
+        let inputs = (
+            TreeNode::layer_gen(vec![5, 4, 8, 11, -99, 13, 4, 7, 2, -99, -99, 5, 1]),
+            22,
+        );
+        let except = vec![vec![5, 4, 11, 2], vec![5, 8, 4, 5]];
+        let output = Solution::path_sum(inputs.0, inputs.1);
         assert_eq!(except, output);
     }
 }

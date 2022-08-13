@@ -20,22 +20,33 @@ impl TreeNode {
     }
 }
 impl Solution {
-    pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        fn builder(nums: &[i32]) -> Option<Rc<RefCell<TreeNode>>> {
-            match nums.len() {
-                0 => None,
-                1 => Some(Rc::new(RefCell::new(TreeNode::new(nums[0])))),
-                _ => {
-                    let pivot = nums.len() / 2;
-                    Some(Rc::new(RefCell::new(TreeNode {
-                        val: nums[pivot],
-                        left: builder(&nums[..pivot]),
-                        right: builder(&nums[pivot + 1..]),
-                    })))
-                }
-            }
+    fn recusive(
+        root: Option<Rc<RefCell<TreeNode>>>,
+        path: &mut Vec<Option<Rc<RefCell<TreeNode>>>>,
+    ) {
+        // record
+        path.push(Some(Rc::clone(root.as_ref().unwrap())));
+        if let Some(next) = root.as_ref().unwrap().borrow().left.as_ref() {
+            Solution::recusive(Some(Rc::clone(next)), path)
         }
-        builder(&nums)
+        if let Some(next) = root.as_ref().unwrap().borrow().right.as_ref() {
+            Solution::recusive(Some(Rc::clone(next)), path)
+        }
+    }
+
+    pub fn flatten(root: &mut Option<Rc<RefCell<TreeNode>>>) {
+        // flatten order: pre-order
+        if root.is_some() {
+            let mut path = Vec::new();
+            Solution::recusive(root.clone(), &mut path);
+            // rebuild the tree as linked list
+            let mut curr = None;
+            while let Some(parent) = path.pop() {
+                parent.as_ref().unwrap().borrow_mut().left.take();
+                parent.as_ref().unwrap().borrow_mut().right = curr;
+                curr = parent;
+            }
+        };
     }
 }
 
@@ -44,10 +55,24 @@ mod test {
     use super::*;
     #[test]
     fn case1() {
-        let inputs = vec![-10, -3, 0, 5, 9];
-        let except = TreeNode::layer_gen(vec![0, -3, 9, -10, -99, 5]);
-        let output = Solution::sorted_array_to_bst(inputs);
-        assert_eq!(except, output);
+        let mut inputs = TreeNode::layer_gen(vec![1, 2, 5, 3, 4, -99, 6]);
+        let except = TreeNode::layer_gen(vec![1, -99, 2, -99, 3, -99, 4, -99, 5, -99, 6]);
+        let output = Solution::flatten(&mut inputs);
+        assert_eq!(except, inputs);
+    }
+    #[test]
+    fn case2() {
+        let mut inputs = TreeNode::layer_gen(vec![]);
+        let except = TreeNode::layer_gen(vec![]);
+        let output = Solution::flatten(&mut inputs);
+        assert_eq!(except, inputs);
+    }
+    #[test]
+    fn case3() {
+        let mut inputs = TreeNode::layer_gen(vec![1]);
+        let except = TreeNode::layer_gen(vec![1]);
+        let output = Solution::flatten(&mut inputs);
+        assert_eq!(except, inputs);
     }
 }
 

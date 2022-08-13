@@ -22,12 +22,12 @@ impl Solution {
                 if spliter[i + 1] - spliter[i] == 3 {
                     if s[spliter[i]] > 50 {
                         return None;
-                    } else if s[spliter[i]]==50 {
-                        if s[spliter[i]+1] > 53 {
-                            return None
-                        } else if s[spliter[i]+1]==53 {
-                            if s[spliter[i]+2]>53 {
-                                return None
+                    } else if s[spliter[i]] == 50 {
+                        if s[spliter[i] + 1] > 53 {
+                            return None;
+                        } else if s[spliter[i] + 1] == 53 {
+                            if s[spliter[i] + 2] > 53 {
+                                return None;
                             }
                         }
                     }

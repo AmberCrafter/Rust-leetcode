@@ -7,11 +7,11 @@ impl Solution {
         let mut buf = [2, 1];
 
         for i in 3..=n {
-            buf[(i%2) as usize] = buf.into_iter().sum();
+            buf[(i % 2) as usize] = buf.into_iter().sum();
             // println!("{:?}", buf);
         }
 
-        buf[(n%2) as usize]
+        buf[(n % 2) as usize]
     }
 }
 

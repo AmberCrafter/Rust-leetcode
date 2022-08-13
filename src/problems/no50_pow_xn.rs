@@ -8,11 +8,10 @@ impl Solution {
         let mut res = 1.0;
 
         if n < 0 {
-            if n==i32::MIN {
+            if n == i32::MIN {
                 res /= x;
-                n+=1;
+                n += 1;
             }
-
 
             x = 1.0 / x;
             n = !n + 1;
@@ -25,8 +24,8 @@ impl Solution {
             x *= x;
             n >>= 1;
         }
-        
-        (res*(1e5) as f64).round() * (1e-5) as f64
+
+        (res * (1e5) as f64).round() * (1e-5) as f64
     }
 }
 

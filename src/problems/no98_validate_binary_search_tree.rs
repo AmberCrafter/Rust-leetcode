@@ -23,15 +23,18 @@ impl TreeNode {
 impl Solution {
     pub fn is_valid_bst(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
         // dfs traveler
-        fn checker(tree: Option<Rc<RefCell<TreeNode>>>, smaller: &mut Vec<i32>, larger: &mut Vec<i32>) -> bool {
+        fn checker(
+            tree: Option<Rc<RefCell<TreeNode>>>,
+            smaller: &mut Vec<i32>,
+            larger: &mut Vec<i32>,
+        ) -> bool {
             if let Some(node) = tree {
                 println!("{:?}", node);
                 let node = node.borrow();
 
-                if smaller.iter().any(|v| v<=&node.val) ||
-                    larger.iter().any(|v| v>=&node.val) {
-                        return false
-                    }
+                if smaller.iter().any(|v| v <= &node.val) || larger.iter().any(|v| v >= &node.val) {
+                    return false;
+                }
 
                 (if let Some(rcnode) = node.left.as_ref() {
                     smaller.push(node.val);

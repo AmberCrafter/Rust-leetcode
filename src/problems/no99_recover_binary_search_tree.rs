@@ -48,19 +48,21 @@ impl Solution {
                 // curr = node.borrow().left.clone();
                 curr = if let Some(leaf) = &node.borrow().left {
                     Some(Rc::clone(&leaf))
-                } else { None }
+                } else {
+                    None
+                }
                 // curr = Some(Rc::clone(&node.borrow().left.as_ref().unwrap()));
             }
 
             // do the inorder traversal and check it is sorted or not
             if let Some(node) = stack.pop() {
                 if let Some(p) = pred {
-                    if p.borrow().val>=node.borrow().val {
+                    if p.borrow().val >= node.borrow().val {
                         y = Some(Rc::clone(&node));
                         if x.is_none() {
                             // get the left hand side error node
                             x = Some(Rc::clone(&p));
-                        }else{
+                        } else {
                             // get the right hand side error node
                             break;
                         }
@@ -69,12 +71,13 @@ impl Solution {
                 // update curr and pred
                 pred = Some(Rc::clone(&node));
 
-                
                 // these three kind of code can reach the same approach but the third one could panic!
                 // curr = node.borrow().right.clone();
                 curr = if let Some(leaf) = &node.borrow().right {
                     Some(Rc::clone(&leaf))
-                } else { None }
+                } else {
+                    None
+                }
                 // curr = Some(Rc::clone(&node.borrow().right.as_ref().unwrap()));
             }
         }

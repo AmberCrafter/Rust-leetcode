@@ -1,4 +1,4 @@
-use std::collections::{VecDeque, HashMap};
+use std::collections::{HashMap, VecDeque};
 
 pub struct Solution {}
 impl Solution {
@@ -36,7 +36,8 @@ impl Solution {
                 }
 
                 // check and update minimum substring left index and length
-                if n_free == 0 { // this mean input string is valid
+                if n_free == 0 {
+                    // this mean input string is valid
                     let cur_len = i - *window.front().unwrap();
                     if cur_len < len {
                         len = cur_len;
@@ -78,8 +79,6 @@ mod test {
         assert_eq!(except, output);
     }
 }
-
-
 
 /*
 Note.

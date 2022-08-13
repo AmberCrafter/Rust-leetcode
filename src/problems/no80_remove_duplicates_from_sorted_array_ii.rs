@@ -58,21 +58,21 @@ impl Solution {
         let mut pivot = 0;
         let mut idx = 1;
 
-        while idx<nums.len() {
-            is_duplicate = if nums[idx]==nums[pivot] {
+        while idx < nums.len() {
+            is_duplicate = if nums[idx] == nums[pivot] {
                 if !is_duplicate {
-                    pivot+=1;
+                    pivot += 1;
                     nums.swap(pivot, idx);
                 }
                 true
             } else {
-                pivot+=1;
+                pivot += 1;
                 nums.swap(pivot, idx);
                 false
             };
-            idx+=1;
+            idx += 1;
         }
-        (pivot+1) as i32
+        (pivot + 1) as i32
     }
 }
 
@@ -81,7 +81,7 @@ mod test {
     use super::*;
     #[test]
     fn case1() {
-        let mut inputs = vec![1,1,1,2,2,3];
+        let mut inputs = vec![1, 1, 1, 2, 2, 3];
         println!("nums: {:?}", inputs);
         let except = 5;
         let output = Solution::remove_duplicates(&mut inputs);
@@ -91,7 +91,7 @@ mod test {
 
     #[test]
     fn case2() {
-        let mut inputs = vec![0,0,1,1,1,1,2,3,3];
+        let mut inputs = vec![0, 0, 1, 1, 1, 1, 2, 3, 3];
         println!("nums: {:?}", inputs);
         let except = 7;
         let output = Solution::remove_duplicates(&mut inputs);
@@ -99,5 +99,3 @@ mod test {
         assert_eq!(except, output);
     }
 }
-
-

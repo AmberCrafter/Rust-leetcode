@@ -27,8 +27,8 @@ impl Solution {
             if let Some(pivot) = inorder.iter().position(|&v| v == preorder[0]) {
                 Some(Rc::new(RefCell::new(TreeNode {
                     val: preorder[0],
-                    left: builder(&preorder[1..(1+pivot)], &inorder[..pivot]),
-                    right: builder(&preorder[(1+pivot)..], &inorder[(pivot+1)..]),
+                    left: builder(&preorder[1..(1 + pivot)], &inorder[..pivot]),
+                    right: builder(&preorder[(1 + pivot)..], &inorder[(pivot + 1)..]),
                 })))
             } else {
                 None
