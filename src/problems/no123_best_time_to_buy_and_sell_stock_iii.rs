@@ -1,36 +1,29 @@
 pub struct Solution {}
 impl Solution {
     pub fn max_profit(prices: Vec<i32>) -> i32 {
-        let length = prices.len();
-        if length==2 {
-            return if prices[1]>prices[0] {prices[1]-prices[0]} else {0};
-        }
-
-        let mut dp = vec![vec![0; length]; length];
-        for i in 0..length-1 {
-            for j in i+1..length {
-                dp[i][j] = prices[j] - prices[i];
-                if dp[i][j]>dp[i][0] {dp[i][0]=dp[i][j];}
-            }
-        }
-        for j in 1..length {
-            dp[length-1][j-1] = (0..length-1).map(|i| dp[i][j]).max().unwrap();
-        }
-
-
-
-        let mut res = 0;
-        for j in 0..length-1 {
-            for i in j+1..length-1 {
-                let tmp = dp[length-1][j] + dp[i][0];
-                if tmp>res {res = tmp;}
-            }
-        }
-
-        for val in dp {
-            println!("{:?}", val);
-        }
-        res
+        let max_profit_vec = prices
+            .iter()
+            .rev()
+            .scan(0, |state, &v| {
+                *state = (*state).max(v);
+                Some(*state)
+            })
+            .collect::<Vec<_>>();
+        println!("{:?}", max_profit_vec);
+        prices
+			.iter()
+			.zip(max_profit_vec.iter().rev())
+			.skip(1)
+			.fold(
+            (0, prices[0], max_profit_vec[0] - prices[0]),
+            |(max_so_far, min_so_far, result), (&v, &l)| {
+			    let result = result.max(max_so_far + l - v);
+			    let min_so_far = min_so_far.min(v);
+			    let max_so_far = max_so_far.max(v - min_so_far);
+                println!("{:?}\t{:?}",(v,l), (max_so_far, min_so_far, result));
+			    (max_so_far, min_so_far, result)
+		    },
+        ).2
     }
 }
 
