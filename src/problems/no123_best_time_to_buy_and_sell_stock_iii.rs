@@ -1,29 +1,42 @@
 pub struct Solution {}
 impl Solution {
+    // ref: https://www.cnblogs.com/grandyang/p/4281975.html
     pub fn max_profit(prices: Vec<i32>) -> i32 {
-        let max_profit_vec = prices
-            .iter()
-            .rev()
-            .scan(0, |state, &v| {
-                *state = (*state).max(v);
-                Some(*state)
-            })
-            .collect::<Vec<_>>();
-        println!("{:?}", max_profit_vec);
-        prices
-			.iter()
-			.zip(max_profit_vec.iter().rev())
-			.skip(1)
-			.fold(
-            (0, prices[0], max_profit_vec[0] - prices[0]),
-            |(max_so_far, min_so_far, result), (&v, &l)| {
-			    let result = result.max(max_so_far + l - v);
-			    let min_so_far = min_so_far.min(v);
-			    let max_so_far = max_so_far.max(v - min_so_far);
-                println!("{:?}\t{:?}",(v,l), (max_so_far, min_so_far, result));
-			    (max_so_far, min_so_far, result)
-		    },
-        ).2
+        // // 2D - dynamic programming solution
+        // // row [i]: day
+        // // col [j]: number of transation times
+        // // local table: the best profit of selling today with bought yesterday(global table) or bought before yesterday(local table)
+        // // global table: the current best profit
+
+        // let num = prices.len(); // number of days
+        // let ttimes = 2; // transation times
+        // let mut lt = vec![vec![0; ttimes+1]; num];
+        // let mut gt = vec![vec![0; ttimes+1]; num];
+
+        // for i in 1..num {
+        //     for j in 1..ttimes+1 {
+        //         let diff = prices[i] - prices[i-1];
+        //         lt[i][j] = ((gt[i-1][j-1] + diff.max(0))).max(lt[i-1][j] + diff); // choosing 0 menas no bought stock yesterday or before yesterday
+        //         gt[i][j] = gt[i-1][j].max(lt[i][j]);
+        //     }
+        // }
+        // gt[num-1][ttimes]
+
+
+        // Because we only need the informaiton of previous day
+        let num = prices.len(); // number of days
+        let ttimes = 2; // transation times
+        let mut lt = vec![0; ttimes+1];
+        let mut gt = vec![0; ttimes+1];
+
+        for i in 1..num {
+            for j in (1..ttimes+1).rev() {
+                let diff = prices[i] - prices[i-1];
+                lt[j] = ((gt[j-1] + diff.max(0))).max(lt[j] + diff); // choosing 0 menas no bought stock yesterday or before yesterday
+                gt[j] = gt[j].max(lt[j]);
+            }
+        }
+        gt[ttimes]
     }
 }
 
@@ -73,6 +86,14 @@ mod test {
     fn case6() {
         let inputs = vec![1,4,2];
         let except = 3;
+        let output = Solution::max_profit(inputs);
+        assert_eq!(except, output);
+    }
+
+    #[test]
+    fn case7() {
+        let inputs = vec![1,2,4,2,5,7,2,4,9,0];
+        let except = 13;
         let output = Solution::max_profit(inputs);
         assert_eq!(except, output);
     }
