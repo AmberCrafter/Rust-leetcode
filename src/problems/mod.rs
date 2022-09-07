@@ -25,6 +25,7 @@ pub mod no123_best_time_to_buy_and_sell_stock_iii;
 pub mod no124_binary_tree_maximum_path_sum;
 pub mod no125_valid_palindrome;
 pub mod no126_word_ladder_ii;
+pub mod no127_word_ladder;
 pub mod no48_rotate_image;
 pub mod no49_group_anagrams;
 pub mod no50_pow_xn;

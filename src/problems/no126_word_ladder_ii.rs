@@ -1,5 +1,3 @@
-use std::collections::HashSet;
-
 pub struct Solution {}
 impl Solution {
     pub fn find_valid_index(target: &str, word_list: &Vec<String>) -> Vec<usize> {
@@ -19,61 +17,77 @@ impl Solution {
         res
     }
 
-    pub fn is_valid(s1: &str, s2:&str) -> bool {
-        let mut is_diff = false;
-        for (c1, c2) in s1.as_bytes().iter().zip(s2.as_bytes().iter()) {
-            if c1!=c2 {
-                if is_diff {
-                    return false
-                } else {
-                    is_diff = true;
+    pub fn gen_graph_map(graph: &mut Graph, word_list: &Vec<String>) {
+        for (idx_word, word) in word_list.iter().enumerate() {
+            let indexes = Solution::find_valid_index(word, word_list);
+            for index in indexes {
+                if word != &word_list[index] {
+                    graph.insert_bidirection(idx_word, index);
                 }
             }
-        }   
-        true
+        }
     }
 
-    pub fn gen_paths(
-        dist: &Vec<usize>,
-        word_list: &Vec<String>,
-        target_index: usize,
-        begin_word: String
-    ) -> Vec<Vec<String>> {
-        // if not reach end_word
-        if dist[target_index]==usize::MAX {
-            return Vec::new();
-        }
+    pub fn calculate_dist(graph: &Graph, sp: &String, ep: &String) -> Vec<usize> {
+        let idx_sp = graph.index_list.iter().position(|v| v == sp).unwrap();
+        let idx_ep = graph.index_list.iter().position(|v| v == ep).unwrap();
+        let mut dist_table = vec![usize::MAX; graph.index_list.len()];
 
-        let mut layer = Vec::new();
-        layer.push(vec![target_index]);
-        for i in (0..dist[target_index]).rev() {
-            let mut tmp = Vec::new();
-            for (idx, &ele) in dist.iter().enumerate() {
-                if ele == i {
-                    tmp.push(idx);
+        let mut step = 0;
+        dist_table[idx_sp] = step;
+        let mut indexes = graph.maps[idx_sp].clone();
+        let mut is_find = false;
+        while !is_find && indexes.len() > 0 {
+            step += 1;
+            let mut next_indexes = Vec::new();
+            for &i in &indexes {
+                if i == idx_ep {
+                    is_find = true;
                 }
-            }
-            layer.push(tmp);
-        }
-
-        layer.reverse();
-
-        let mut res = vec![vec![begin_word]];
-        for members in layer {
-            let mut next_paths = Vec::new();
-            for idx in members {
-                let word = word_list[idx].clone();
-                for path in &res {
-                    if Solution::is_valid(path.last().unwrap(), &word) {
-                        let mut tmp = path.clone();
-                        tmp.push(word.clone());
-                        next_paths.push(tmp);
+                if dist_table[i] > step {
+                    dist_table[i] = step;
+                    for &next_dest in graph.maps[i].iter() {
+                        next_indexes.push(next_dest);
                     }
                 }
             }
-            res = next_paths;
+            indexes = next_indexes;
         }
-        res
+
+        dist_table
+    }
+
+    pub fn gen_shortest_paths(
+        result: &mut Vec<Vec<String>>,
+        mut path: Vec<String>,
+        graph: &Graph,
+        dist_table: &Vec<usize>,
+        sp: &String,
+        ep: &String,
+        step: usize,
+    ) {
+        path.push(sp.clone());
+        if sp == ep {
+            result.push(path);
+            return;
+        }
+        let idx_sp = graph.index_list.iter().position(|v| v == sp).unwrap();
+        let idx_ep = graph.index_list.iter().position(|v| v == ep).unwrap();
+        let indexes = &graph.maps[idx_sp];
+        for &idx in indexes {
+            if step == dist_table[idx] && step <=dist_table[idx_ep] {
+                let next_sp = &graph.index_list[idx];
+                 Solution::gen_shortest_paths(
+                    result,
+                    path.clone(),
+                    graph,
+                    dist_table,
+                    next_sp,
+                    ep,
+                    step + 1,
+                );
+            }
+        }
     }
 
     pub fn find_ladders(
@@ -84,43 +98,73 @@ impl Solution {
         // begin_word may not in word_list and not present in return list
         // end_word need to present in word_list and return list
 
-        let mut step = 0;
-        let mut dist = vec![usize::MAX; word_list.len()];
-        let mut layer = HashSet::new();
-
-        if let Some(target_index) = word_list.iter().position(|v| v == &end_word) {
-            Solution::find_valid_index(&begin_word, &word_list)
-                .iter()
-                .for_each(|&i| {
-                    layer.insert(i);
-                });
-            for &cur in layer.iter() {
-                dist[cur] = 0;
+        //check end_word in list or not
+        if let Some(idx_ep) = word_list.iter().position(|v| v==&end_word) {
+            let mut word_list = word_list;
+            if !word_list.contains(&begin_word) {
+                word_list.push(begin_word.to_string());
             }
-
-            while !layer.is_empty() {
-                step += 1;
-                let mut next_layer = HashSet::new();
-                for cur in layer.drain() {
-                    let indexes = Solution::find_valid_index(&word_list[cur], &word_list);
-                    for idx in indexes {
-                        if dist[idx] > step {
-                            dist[idx] = step;
-                            next_layer.insert(idx);
-                        } 
-                    }
+            let mut graph = Graph::new(&word_list);
+    
+            Solution::gen_graph_map(&mut graph, &word_list);
+            // println!("{:#?}", graph);
+    
+            let mut dist_table = Solution::calculate_dist(&graph, &begin_word, &end_word);
+            let dist_table_rev = Solution::calculate_dist(&graph, &end_word, &begin_word);
+            let min_step = dist_table[idx_ep];
+    
+            // remove incorrect path
+            for (idx, (&d1, &d2)) in dist_table.clone().iter().zip(dist_table_rev.iter()).enumerate() {
+                if (d1.checked_add(d2).unwrap_or(usize::MAX) )!=min_step {
+                    dist_table[idx] = usize::MAX;
                 }
-
-                if layer.contains(&target_index) {
-                    break;
-                };
-                layer = next_layer;
             }
-
-            println!("{:?}", dist);
-            Solution::gen_paths(&dist, &word_list, target_index, begin_word)
+    
+            // println!("{:?}", dist_table);
+            // println!("{:?}", dist_table_rev);
+    
+            let mut results = Vec::new();
+            Solution::gen_shortest_paths(
+                &mut results,
+                Vec::new(),
+                &graph,
+                &dist_table,
+                &begin_word,
+                &end_word,
+                1,
+            );
+    
+            // println!("{:?}", results);
+    
+            results
         } else {
             vec![]
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct Graph {
+    index_list: Vec<String>,
+    maps: Vec<Vec<usize>>, // start: end
+}
+
+impl Graph {
+    pub fn new(members: &Vec<String>) -> Self {
+        Self {
+            index_list: members.clone(),
+            maps: vec![Vec::new(); members.len()],
+        }
+    }
+
+    pub fn insert_bidirection(&mut self, p1: usize, p2: usize) {
+        self.insert_direction(p1, p2);
+        self.insert_direction(p2, p1);
+    }
+
+    pub fn insert_direction(&mut self, sp: usize, ep: usize) {
+        if !self.maps[sp].contains(&ep) {
+            self.maps[sp].push(ep);
         }
     }
 }
@@ -143,8 +187,20 @@ mod test {
             ],
         );
         let except = vec![
-            vec!["hit".to_string(),"hot".to_string(),"dot".to_string(),"dog".to_string(),"cog".to_string()],
-            vec!["hit".to_string(),"hot".to_string(),"lot".to_string(),"log".to_string(),"cog".to_string()]
+            vec![
+                "hit".to_string(),
+                "hot".to_string(),
+                "dot".to_string(),
+                "dog".to_string(),
+                "cog".to_string(),
+            ],
+            vec![
+                "hit".to_string(),
+                "hot".to_string(),
+                "lot".to_string(),
+                "log".to_string(),
+                "cog".to_string(),
+            ],
         ];
         let output = Solution::find_ladders(inputs.0, inputs.1, inputs.2);
         assert_eq!(except, output);
@@ -155,10 +211,7 @@ mod test {
         let inputs = (
             "hot".to_string(),
             "dog".to_string(),
-            vec![
-                "hot".to_string(),
-                "dog".to_string(),
-            ],
+            vec!["hot".to_string(), "dog".to_string()],
         );
         let except: Vec<Vec<String>> = Vec::new();
         let output = Solution::find_ladders(inputs.0, inputs.1, inputs.2);
@@ -170,15 +223,9 @@ mod test {
         let inputs = (
             "hot".to_string(),
             "dot".to_string(),
-            vec![
-                "hot".to_string(),
-                "dot".to_string(),
-            ],
+            vec!["hot".to_string(), "dot".to_string()],
         );
-        let except: Vec<Vec<String>> = vec![vec![
-            "hot".to_string(),
-            "dot".to_string(),
-        ]];
+        let except: Vec<Vec<String>> = vec![vec!["hot".to_string(), "dot".to_string()]];
         let output = Solution::find_ladders(inputs.0, inputs.1, inputs.2);
         assert_eq!(except, output);
     }
@@ -681,9 +728,44 @@ mod test {
             ],
         );
         let except: Vec<Vec<String>> = vec![vec![
-            "hot".to_string(),
-            "dot".to_string(),
+            "aaaaa".to_string(),
+            "aaaaz".to_string(),
+            "aaawz".to_string(),
+            "aavwz".to_string(),
+            "avvwz".to_string(),
+            "vvvwz".to_string(),
+            "vvvww".to_string(),
+            "wvvww".to_string(),
+            "wwvww".to_string(),
+            "wwwww".to_string(),
+            "ywwww".to_string(),
+            "yywww".to_string(),
+            "yyyww".to_string(),
+            "yyyyw".to_string(),
+            "yyyyy".to_string(),
+            "xyyyy".to_string(),
+            "xxyyy".to_string(),
+            "xxxyy".to_string(),
+            "xxxxy".to_string(),
+            "xxxxx".to_string(),
+            "gxxxx".to_string(),
+            "ggxxx".to_string(),
+            "gggxx".to_string(),
+            "ggggx".to_string(),
+            "ggggg".to_string(),
         ]];
+        let output = Solution::find_ladders(inputs.0, inputs.1, inputs.2);
+        assert_eq!(except, output);
+    }
+
+    #[test]
+    fn case5() {
+        let inputs = (
+            "hit".to_string(),
+            "cog".to_string(),
+            vec!["hot".to_string(),"dot".to_string(),"dog".to_string(),"lot".to_string(),"log".to_string()],
+        );
+        let except: Vec<Vec<String>> = vec![];
         let output = Solution::find_ladders(inputs.0, inputs.1, inputs.2);
         assert_eq!(except, output);
     }
