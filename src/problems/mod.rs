@@ -31,7 +31,7 @@ pub mod no129_sum_root_to_leaf_numbers;
 pub mod no130_surrounded_regions;
 pub mod no131_palindrome_partitioning;
 pub mod no132_palindrome_partitioning_ii;
-// pub mod no134_gas_station;
+pub mod no134_gas_station;
 // pub mod no135_candy;
 pub mod no136_single_number;
 pub mod no48_rotate_image;

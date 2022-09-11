@@ -1,4 +1,4 @@
-// TLE
+// Too slow
 
 pub struct Solution {}
 impl Solution {
@@ -50,31 +50,22 @@ impl Solution {
                     table[ri].push(ci+1);
                 }
             }
-            table[ri].reverse();
         }
 
         // for val in &table {
         //     println!("table: {:?}", val);
         // }
 
-        // check the shortest by recursive
-        fn walk(result: &mut usize, table: &Vec<Vec<usize>>, cur: usize, idx: usize) {
-            if cur>=*result {return;}
-            for &next in &table[idx] {
-                if next == table.len() {
-                    *result = std::cmp::min(*result, cur);
-                    return;
-                } else {
-                    walk(result, table, cur+1, next);
-                }
+        // check the shortest by dp 
+        let mut dp = vec![i32::MAX; s.len()+1];
+        dp[0] = 0;
+        for (sp, members) in table.iter().enumerate() {
+            for &ep in members {
+                dp[ep] = dp[ep].min(dp[sp]+1);
             }
         }
-        let mut result = usize::MAX;
-        // println!("result: {:?}", result);
-        // println!("table: {:?}", table);
-        walk(&mut result, &table, 0, 0);
-
-        result as i32
+        println!("dp: {:?}", dp);
+        *dp.last().unwrap()-1
     }
 }
 
