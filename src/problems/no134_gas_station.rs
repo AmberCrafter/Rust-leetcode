@@ -3,32 +3,24 @@
 pub struct Solution {}
 impl Solution {
     pub fn can_complete_circuit(gas: Vec<i32>, cost: Vec<i32>) -> i32 {
-        // merge
-        let table = (0..gas.len()).map(|idx| gas[idx] - cost[idx]).collect::<Vec<i32>>();
-        let mut tmp = Vec::new();
+        let mut pidx = 0;
+        let mut nval = 0;
+        let mut pval = 0;
 
-        let mut sp = 0;
-        let mut buf = 0;
-        for (i, &value) in table.iter().enumerate() {
-            if buf<0 {
-                tmp.push((sp, buf));
-                sp = i;
-                buf = value;
-                continue;
+        for idx in 0..gas.len() {
+            if pval<0 {
+                nval+=pval;
+                pval = 0;
+                pidx = idx;
             }
-            buf+=value;
+            pval += gas[idx] - cost[idx];
         }
-        // tmp.push((sp, buf));
-        // println!("tmp: {:?}", tmp);
-        if buf<0 {return -1;}
-        
-        for (_, val) in tmp {
-            buf+=val;
-            if buf<0 {
-                return -1;
-            }
+
+        if pval<0 || pval+nval<0 {
+            -1
+        } else {
+            pidx as i32
         }
-        sp as i32
     }
 }
 

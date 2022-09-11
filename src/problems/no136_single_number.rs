@@ -2,6 +2,14 @@
 
 pub struct Solution {}
 impl Solution {
+    // best
+    // ref: https://leetcode.com/problems/single-number/discuss/1467837/Rust-solution
+    // limit: if and only if the repeat times of duplicative members is even
+    // pub fn single_number(nums: Vec<i32>) -> i32 {
+    //     nums.iter().fold(0, |f, x| f ^ x)
+    // }
+
+
     pub fn single_number(nums: Vec<i32>) -> i32 {
         let mut nums = nums;
         nums.sort();

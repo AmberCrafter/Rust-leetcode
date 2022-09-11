@@ -2,6 +2,26 @@
 
 pub struct Solution {}
 impl Solution {
+    // best
+    // ref: https://leetcode.com/problems/candy/discuss/1300626/Rust-two-pass-solution
+    // pub fn candy(ratings: Vec<i32>) -> i32 {
+    //     let n = ratings.len();
+    //     let mut ans = vec![1; n];
+    //     for i in 1..n {
+    //         if ratings[i] > ratings[i - 1] {
+    //             ans[i] = ans[i - 1] + 1;
+    //         }
+    //     }
+    //     for i in (0..(n - 1)).rev() {
+    //         if ratings[i] > ratings[i + 1] {
+    //             ans[i] = std::cmp::max(ans[i + 1] + 1, ans[i]);
+    //         }
+    //     }
+    //     ans.into_iter().sum()
+    // }
+
+
+
     pub fn candy(ratings: Vec<i32>) -> i32 {
         // list of given candy
         let mut candy = vec![0; ratings.len()];
@@ -24,7 +44,6 @@ impl Solution {
         }
         candy.iter().sum()
     }
-
 }
 
 #[cfg(test)]
