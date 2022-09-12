@@ -4,51 +4,22 @@ pub struct Solution {}
 impl Solution {
     pub fn word_break(s: String, word_dict: Vec<String>) -> bool {
         // dp
-
-        
-        // map {
-        //     sp: [ep]
-        // }
-        let s = s.bytes().collect::<Vec<u8>>();
-        let mut map = HashMap::new();
-        for word in word_dict {
-            if word.len()>s.len() {break;}
-            let limit = s.len()-word.len();
-            for sp in 0..s.len() {
-                if sp>limit {break;}
-                let mut is_substring = true;
-                for (offset, pat) in word.bytes().enumerate() {
-                    if s[sp+offset] != pat {
-                        is_substring = false;
-                        break;
-                    }
-                }
-                if is_substring {
-                    let entry = map.entry(sp).or_insert(Vec::new());
-                    entry.push(sp + word.len());
+        let s = s.as_bytes();
+        let nums = s.len();
+        let mut dp = vec![false; nums+1];
+        dp[nums] = true;
+        for i in (1..nums+1).rev() {
+            if dp[i]==false {continue;}
+            for word in word_dict.iter() {
+                let len = word.len();
+                if i<len {continue;}
+                if word.as_bytes()==&s[(i-len)..i] {
+                    dp[i-len] = true && dp[i];
                 }
             }
         }
 
-        for val in &map {
-            println!("map: {:?}", val);
-        }
-
-        fn walk(map: &HashMap<usize, Vec<usize>>, target: usize, idx: usize) -> bool {
-            if idx == target {
-                return true;
-            }
-            if let Some(elements) = map.get(&idx) {
-                for &next in elements {
-                    if walk(map, target, next) {
-                        return true
-                    }
-                }
-            }
-            false
-        }
-
-        walk(&map, s.len(), 0)
+        dp[0]
     }
 }
 
