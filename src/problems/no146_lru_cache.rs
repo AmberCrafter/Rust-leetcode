@@ -117,17 +117,6 @@ impl DoubleListNode {
                 self.tail.take();
             }
         }
-
-        // if prev.is_some() {
-        //     prev.as_ref().unwrap().borrow_mut().next = next.clone();
-        // } else {
-        //     self.head.replace(next.as_ref().unwrap().clone());
-        // }
-        // if next.is_some() {
-        //     next.as_ref().unwrap().borrow_mut().prev = prev;
-        // } else {
-        //     self.tail.replace(prev.as_ref().unwrap().clone());
-        // }
     }
 
     pub fn move_head(&mut self, target: Rc<RefCell<ListNode>>) {
