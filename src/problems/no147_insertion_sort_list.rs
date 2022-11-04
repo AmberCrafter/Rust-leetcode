@@ -1,59 +1,34 @@
+use std::ops::Deref;
+
 pub struct Solution {}
 // Definition for singly-linked list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct ListNode {
-  pub val: i32,
-  pub next: Option<Box<ListNode>>
+    pub val: i32,
+    pub next: Option<Box<ListNode>>,
 }
 
 impl ListNode {
-  #[inline]
-  fn new(val: i32) -> Self {
-    ListNode {
-      next: None,
-      val
+    #[inline]
+    fn new(val: i32) -> Self {
+        ListNode { next: None, val }
     }
-  }
 }
 impl Solution {
-    pub fn insertion_sort_list(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
-        fn insertion_sort(arr: &mut Vec<Option<Box<ListNode>>>) {
-            // largest ... smallest
-            let mut cur = 1;
-            let mut right = 1;
-            while right<arr.len() {
-                while arr[cur].as_ref().unwrap().val>arr[cur-1].as_ref().unwrap().val {
-                    arr.swap(cur-1, cur);
-                    cur-=1;
-                }
-                right+=1;
-                cur = right;
+    pub fn insertion_sort_list(mut head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
+        // ref best solution: https://leetcode.com/problems/insertion-sort-list/discuss/2739687/Rust
+
+        let mut dummy = ListNode::new(0);
+        while let Some(mut node) = head {
+            head = node.as_mut().next.take();
+            let mut prev = &mut dummy;
+            while prev.next.is_some() && prev.next.as_ref().unwrap().val < node.val {
+                prev = prev.next.as_mut().unwrap();
             }
+            node.next = prev.next.take();
+            prev.next = Some(node);
         }
-        
-        // distructure the listnode
-        let mut buf = Vec::new();
-        buf.push(head);
-        loop {
-            let next = buf.last().unwrap().next.take();
-            if next.is_none() {
-                break;
-            }
-            buf.push(next);
-        }
-
-        // sort
-        insertion_sort(&mut buf);
-
-        // generate list
-        let mut root = buf.pop().unwrap();
-        let mut cur = root.as_mut().unwrap();
-
-        while let Some(node) = buf.pop() {
-            cur.next = node;
-            cur = cur.next.as_mut().unwrap();
-        }
-        root
+        dummy.next
     }
 }
 
@@ -62,9 +37,21 @@ mod test {
     use super::*;
     #[test]
     fn case1() {
-        let inputs = None;
-        let except = None;
-        let output = None;
+        let inputs = ListNode::gen(vec![4, 2, 1, 3]);
+        let except = ListNode::gen(vec![1, 2, 3, 4]);
+        let output = Solution::insertion_sort_list(inputs);
         assert_eq!(except, output);
+    }
+}
+
+impl ListNode {
+    fn gen(arr: Vec<i32>) -> Option<Box<Self>> {
+        let mut root = Some(Box::new(ListNode::new(0)));
+        let mut cur = root.as_mut().unwrap();
+        for val in arr {
+            cur.next.replace(Box::new(ListNode::new(val)));
+            cur = cur.next.as_mut().unwrap();
+        }
+        root.unwrap().next
     }
 }

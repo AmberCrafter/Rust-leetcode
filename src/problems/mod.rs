@@ -39,6 +39,8 @@ pub mod no139_word_break;
 pub mod no140_word_break_ii;
 pub mod no143_reorder_list;
 pub mod no146_lru_cache;
+pub mod no147_insertion_sort_list;
+pub mod no148_sort_list;
 pub mod no48_rotate_image;
 pub mod no49_group_anagrams;
 pub mod no50_pow_xn;
