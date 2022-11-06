@@ -1,17 +1,31 @@
 pub struct Solution {}
 impl Solution {
+    // best solution
+    // ref: https://leetcode.com/problems/maximum-product-subarray/discuss/1613617/Rust
     pub fn max_product(nums: Vec<i32>) -> i32 {
-        let mut nums = nums;
-        let mut res = i32::MIN;
-        for i in 0..nums.len() {
-            for j in 0..i {
-                nums[j] = nums[j] * nums[i];
-                res = res.max(nums[j]);
-            }
-            res = res.max(nums[i]);
+        let mut result = nums[0];
+        let mut current_max = 1;
+        let mut current_min = 1;
+        for num in nums {
+            let max_tmp = current_max;
+            current_max = num.max(num*max_tmp).max(num*current_min);
+            current_min = num.min(num*max_tmp).min(num*current_min);
+            result = result.max(current_max);
         }
-        res
+        result
     }
+    // pub fn max_product(nums: Vec<i32>) -> i32 {
+    //     let mut nums = nums;
+    //     let mut res = i32::MIN;
+    //     for i in 0..nums.len() {
+    //         for j in 0..i {
+    //             nums[j] = nums[j] * nums[i];
+    //             res = res.max(nums[j]);
+    //         }
+    //         res = res.max(nums[i]);
+    //     }
+    //     res
+    // }
 }
 
 #[cfg(test)]

@@ -2,6 +2,7 @@
 
 ## Note
  - no148. quicksort not realistic solution, only merge sort can pass.
+ - no156 to no161 were no rust version or need subscribe
 
 ## Todo
 - [x] no76. (time limit error)
